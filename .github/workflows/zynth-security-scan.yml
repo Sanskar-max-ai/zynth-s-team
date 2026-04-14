@@ -1,0 +1,65 @@
+name: Zynth AI Security Scan
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+
+jobs:
+  zynth-scan:
+    name: Run Adversarial Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install zynth-ai-security
+          # Alternatively: pip install -e . if testing locally
+
+      - name: Execute Security Scan
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # The hypothetical entry-point for Zynth in a CI/CD context:
+          echo "Initiating Zynth Action Run..."
+          python -c "
+          import os
+          import sys
+          import json
+          from zynth import SecurityEngine
+          
+          # Pull standard payloads (you can also load custom JSON tests from your repo)
+          # We'll mock testing here
+          
+          engine = SecurityEngine(target='local')
+          
+          # Async wrapper to process
+          import asyncio
+          from zynth.tests.test_payloads import ALL_TESTS
+          
+          async def main():
+              report = await engine.run_scan(ALL_TESTS[:3]) # fast PR scan
+              score = report['summary']['risk_score']
+              print(json.dumps(report['summary'], indent=2))
+              
+              if score > 50:
+                  print('::error::Zynth detected a Critical Risk Score: {}/100'.format(score))
+                  sys.exit(1)
+              else:
+                  print('Zynth Risk Assessment PASSED.')
+                  sys.exit(0)
+                  
+          asyncio.run(main())
+          "

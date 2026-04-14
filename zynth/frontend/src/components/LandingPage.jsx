@@ -332,4 +332,11 @@ const EcosystemPill = ({ name }) => (
   </div>
 );
 
+const ListItem = ({ text }) => (
+  <li className="flex items-center gap-3 text-muted-foreground">
+    <CheckCircle2 className="w-5 h-5 text-green-500" />
+    <span className="text-white/80">{text}</span>
+  </li>
+);
+
 export default LandingPage;
