@@ -224,11 +224,37 @@ const CommandCenter = ({ onLogout, token }) => {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="glass-panel p-8 rounded-2xl max-w-xl w-full border border-primary/20">
               <h2 className="text-xl font-bold mb-6">SCAN COMPLETE</h2>
-              <div className="space-y-4 max-h-[300px] overflow-y-auto">
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {scanResults.map((r, i) => (
-                  <div key={i} className={`p-4 rounded border ${r.is_vulnerable ? 'bg-red-500/10 border-red-500/20' : 'bg-green-500/10 border-green-500/20'}`}>
-                    <div className="font-bold text-sm mb-1">{r.test_name}</div>
-                    <div className="text-[10px] opacity-50">{r.category}</div>
+                  <div key={i} className={`p-4 rounded-xl border ${r.is_vulnerable ? 'bg-red-500/5 border-red-500/20' : 'bg-green-500/5 border-green-500/20'}`}>
+                    <div className="flex justify-between items-start mb-2">
+                       <div className="font-bold text-sm">{r.test_name}</div>
+                       <div className={`text-[10px] font-mono px-2 py-0.5 rounded ${r.is_vulnerable ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                         {r.is_vulnerable ? 'VULNERABLE' : 'SECURE'}
+                       </div>
+                    </div>
+                    <div className="text-[10px] opacity-50 mb-3 uppercase tracking-widest">{r.category}</div>
+                    
+                    {r.is_vulnerable && r.remediation_patch && (
+                      <div className="mt-4 pt-4 border-t border-white/5">
+                        <div className="text-[10px] font-bold text-primary mb-2 flex items-center gap-2">
+                          <Shield className="w-3 h-3" /> ZYNTH REMEDIATION PATCH:
+                        </div>
+                        <pre className="bg-black/60 p-3 rounded-lg text-[11px] font-mono text-green-400 overflow-x-auto border border-green-500/20 shadow-inner">
+                          <code>{r.remediation_patch}</code>
+                        </pre>
+                        <button 
+                          onClick={() => {
+                            navigator.clipboard.writeText(r.remediation_patch);
+                            setCopiedPatchIndex(i);
+                            setTimeout(() => setCopiedPatchIndex(null), 2000);
+                          }}
+                          className="mt-2 text-[10px] font-bold text-muted-foreground hover:text-primary transition-all flex items-center gap-2"
+                        >
+                          <Copy className="w-3 h-3" /> {copiedPatchIndex === i ? 'COPIED TO CLIPBOARD' : 'COPY PATCH SNIPPET'}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
