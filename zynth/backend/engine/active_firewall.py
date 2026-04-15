@@ -19,7 +19,7 @@ class ActiveFirewall:
         
         self.history: List[Dict[str, Any]] = []
 
-    def evaluate_request(self, payload: str, source: str = "api") -> Dict[str, Any]:
+    def evaluate_request(self, payload: str, source: str = "api", db=None, workspace_id: int = None) -> Dict[str, Any]:
         """Scans an incoming request block synchronously to minimize latency."""
         payload_lower = payload.lower()
         blocked = False
@@ -53,6 +53,19 @@ class ActiveFirewall:
         # Keep history to last 100 requests to prevent memory bloating
         if len(self.history) > 100:
             self.history.pop(0)
+            
+        if db:
+            from models import FirewallLog
+            fw_log = FirewallLog(
+                workspace_id=workspace_id,
+                source=source,
+                payload_snippet=decision["payload_snippet"],
+                action=decision["action"],
+                category=decision["category"],
+                reason=decision["reason"]
+            )
+            db.add(fw_log)
+            db.commit()
             
         return decision
         

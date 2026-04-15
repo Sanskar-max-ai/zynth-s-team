@@ -18,7 +18,12 @@ setup(
         "uvicorn>=0.20.0",
         "httpx>=0.24.0",
         "anthropic>=0.9.0",
-        "pydantic"
+        "pydantic",
+        "sqlalchemy>=2.0.0",
+        "python-jose[cryptography]",
+        "passlib[bcrypt]",
+        "python-multipart",
+        "psycopg2-binary"
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",

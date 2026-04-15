@@ -23,7 +23,7 @@ class SecurityEngine:
             "operational parameters", "instructions are as follows", "flag{"
         ]
 
-    async def run_scan(self, tests: List[Dict[str, Any]], mutate: bool = False) -> Dict[str, Any]:
+    async def run_scan(self, tests: List[Dict[str, Any]], mutate: bool = False, db=None, workspace_id: int = None) -> Dict[str, Any]:
         from engine.adversarial_gen import AdversarialGen
         gen = AdversarialGen()
         
@@ -67,35 +67,51 @@ class SecurityEngine:
             
         summary = self.generate_summary(results)
         
-        # Historical Logging (Step 43)
+        # Historical Logging (Step 48)
         try:
-            import time
-            history_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scan_history.json")
-            history = []
-            if os.path.exists(history_file):
-                with open(history_file, 'r') as f:
-                    try:
-                        history = json.load(f)
-                    except json.JSONDecodeError:
-                        pass
-            
-            history.append({
-                "timestamp": int(time.time()),
-                "date": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "risk_score": summary["risk_score"],
-                "target": self.target,
-                "vulnerabilities": summary["vulnerabilities_found"]
-            })
-            
-            with open(history_file, 'w') as f:
-                json.dump(history, f, indent=2)
-                
-            if len(history) > 1:
-                previous_score = history[-2]["risk_score"]
-                summary["trend"] = round(summary["risk_score"] - previous_score, 1)
+            if db:
+                from models import ScanHistory
+                import time
+                scan_record = ScanHistory(
+                    workspace_id=workspace_id,
+                    target=self.target,
+                    risk_score=summary["risk_score"],
+                    vulnerabilities=summary["vulnerabilities_found"],
+                    total_tests=summary["total_tests"],
+                    trend=summary.get("trend", 0.0)
+                )
+                db.add(scan_record)
+                db.commit()
             else:
-                summary["trend"] = 0.0
+                # Fallback to local JSON if no DB session
+                import json
+                import time
+                history_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scan_history.json")
+                history = []
+                if os.path.exists(history_file):
+                    with open(history_file, 'r') as f:
+                        try:
+                            history = json.load(f)
+                        except json.JSONDecodeError:
+                            pass
                 
+                history.append({
+                    "timestamp": int(time.time()),
+                    "date": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "risk_score": summary["risk_score"],
+                    "target": self.target,
+                    "vulnerabilities": summary["vulnerabilities_found"]
+                })
+                
+                with open(history_file, 'w') as f:
+                    json.dump(history, f, indent=2)
+                    
+                if len(history) > 1:
+                    previous_score = history[-2]["risk_score"]
+                    summary["trend"] = round(summary["risk_score"] - previous_score, 1)
+                else:
+                    summary["trend"] = 0.0
+                    
         except Exception as e:
             print(f"[!] Warning: Failed to save scan history: {e}")
 
