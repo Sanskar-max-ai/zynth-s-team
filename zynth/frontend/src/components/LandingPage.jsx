@@ -44,7 +44,7 @@ const LandingPage = ({ onLaunch }) => {
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-panel border-primary/30 text-primary text-xs font-mono tracking-widest uppercase mb-4"
             >
               <Activity className="w-3 h-3" />
-              Active Threat Detection Engine Online
+              AI Agent Security Audits That Ship
             </motion.div>
             
             <motion.div
@@ -54,12 +54,12 @@ const LandingPage = ({ onLaunch }) => {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-6 leading-tight">
-                THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">AUTOMATED</span><br />
-                SECURITY ENGINEER
+                SHIP AGENTS<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">WITHOUT BLIND SPOTS</span>
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl mx-auto leading-relaxed">
-                Stop shipping vulnerable AI Agents. Zynth aggressively fuzz-tests your models against
-                data exfiltration, goal hijacking, and infrastructure exploitation.
+                Zynth red-teams agent endpoints and tool workflows for prompt injection, data exfiltration,
+                goal hijacking, and privilege abuse before your team ships to production.
               </p>
             </motion.div>
 
@@ -76,9 +76,12 @@ const LandingPage = ({ onLaunch }) => {
               >
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 <Terminal className="w-5 h-5 relative z-10" />
-                <span className="relative z-10">Enter Command Center</span>
+                <span className="relative z-10">Run An Audit</span>
               </button>
-              <button className="px-8 py-4 rounded-lg glass-panel text-white font-bold text-lg hover:bg-white/5 transition-colors flex items-center justify-center gap-2">
+               <button 
+                onClick={() => onLaunch('docs')}
+                className="px-8 py-4 rounded-lg glass-panel text-white font-bold text-lg hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
+              >
                 <Lock className="w-5 h-5 opacity-50" />
                 Read The Docs
               </button>
@@ -94,21 +97,21 @@ const LandingPage = ({ onLaunch }) => {
           >
             <FeatureCard 
               icon={<Cpu />}
-              title="Adversarial Brain"
-              description="Dynamic, ever-evolving exploit payloads designed to bypass prompt filters and safety rails."
+              title="Attack Coverage"
+              description="Prompt injection, tool misuse, data leakage, and escalation probes aimed at real agent failure modes."
               delay={0.1}
             />
             <FeatureCard 
               icon={<Zap className="text-primary" />}
-              title="The Zynth Patch"
-              description="Automatic remediation. We don't just find the vulnerability, we generate the exact code patch to fix it."
+              title="Patch Bundles"
+              description="Generate a review-first bundle with a remediation patch, manifest, and deployment notes for engineering."
               delay={0.2}
               highlight
             />
             <FeatureCard 
               icon={<Shield />}
-              title="CI/CD Integration"
-              description="Block PRs automatically if your agent's underlying risk score drops below the security threshold."
+              title="Developer Workflow"
+              description="Run Zynth from the dashboard today and extend it into SDK-driven release checks as the product grows."
               delay={0.3}
             />
           </motion.div>
@@ -126,16 +129,16 @@ const LandingPage = ({ onLaunch }) => {
               >
                 <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-6">
                   WE DON'T JUST FIND BUGS. <br />
-                  <span className="text-primary">WE FIX THEM.</span>
+                  <span className="text-primary">WE PACKAGE THE FIX.</span>
                 </h2>
                 <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                  Traditional scanners leave you with a PDF of problems. Zynth generates precise, context-aware 
-                  system prompt adjustments and architecture patches to immediately stop attackers from destroying your infrastructure.
+                  Most scanners stop at the finding. Zynth turns the result into something engineering can actually review:
+                  a patch bundle with a remediation snippet, metadata, and enough context to move from alert to change request.
                 </p>
                 <ul className="space-y-4">
-                  <ListItem text="Instant prompt-injection mitigation snippets" />
-                  <ListItem text="Strict DDL and schema manipulation firewalls" />
-                  <ListItem text="Advanced Markdown data exfiltration blockers" />
+                  <ListItem text="Prompt-hardening snippets mapped to the failed test" />
+                  <ListItem text="Tool and access-control guardrails for risky agent actions" />
+                  <ListItem text="Review-first patch bundles instead of fake auto-deploy promises" />
                 </ul>
               </motion.div>
 
@@ -189,8 +192,8 @@ const LandingPage = ({ onLaunch }) => {
         {/* SECTION 3: THE WORKFLOW */}
         <section className="max-w-7xl mx-auto px-8 py-32">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4">DEPLOY IN MINUTES</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">No complex installations. Integrate Zynth directly into your pipeline.</p>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4">FROM TARGET TO FINDING FAST</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Start in the dashboard, prove the wedge, then extend the workflow into your engineering pipeline.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -207,15 +210,15 @@ const LandingPage = ({ onLaunch }) => {
             <WorkflowStep 
               number="02"
               icon={<Zap className="w-6 h-6 text-primary" />}
-              title="Bombard"
-              description="Zynth initiates thousands of adversarial payloads across 15+ threat categories manipulating persona boundaries."
+              title="Attack"
+              description="Run the built-in adversarial suite against prompt boundaries, data paths, tool access, and unsafe output flows."
               delay={0.2}
             />
             <WorkflowStep 
               number="03"
               icon={<Shield className="w-6 h-6 text-primary" />}
               title="Harden"
-              description="Review the generated Audit Report. One-click deploy the suggested Zynth Patches to secure your logic."
+              description="Review the audit report, export the evidence, and generate a patch bundle that engineering can ship."
               delay={0.4}
             />
           </div>
@@ -247,16 +250,16 @@ const LandingPage = ({ onLaunch }) => {
             <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent" />
             
             <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 relative z-10">
-              READY TO RIP YOUR AGENT APART?
+              READY TO FIND THE BREAK BEFORE PROD?
             </h2>
             <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto relative z-10">
-              Find the vulnerability before your users do. Launch the Command Center to initiate a live adversarial audit.
+              Start with one real workflow: audit the agent, inspect the evidence, and hand engineering a patch bundle they can trust.
             </p>
             <button 
               onClick={onLaunch}
               className="px-10 py-5 rounded-xl bg-white text-black font-black text-xl hover:scale-105 transition-transform flex items-center justify-center gap-3 mx-auto shadow-[0_0_40px_rgba(255,255,255,0.3)] relative z-10 group"
             >
-              LAUNCH SIMULATION <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+              OPEN COMMAND CENTER <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </button>
           </motion.div>
         </section>
@@ -268,9 +271,9 @@ const LandingPage = ({ onLaunch }) => {
           <Shield className="w-4 h-4 text-primary" /> ZYNTH SECURITY © 2026
         </div>
         <div className="flex gap-6 mt-4 md:mt-0">
-          <span className="hover:text-white cursor-pointer">Documentation</span>
-          <span className="hover:text-white cursor-pointer">API Reference</span>
-          <span className="hover:text-white cursor-pointer">System Status</span>
+          <span onClick={() => onLaunch('docs')} className="hover:text-white cursor-pointer transition-colors">Documentation</span>
+          <span className="hover:text-white cursor-pointer transition-colors opacity-50">API Reference</span>
+          <span className="hover:text-white cursor-pointer transition-colors opacity-50">System Status</span>
         </div>
       </footer>
     </div>
@@ -333,8 +336,8 @@ const EcosystemPill = ({ name }) => (
 );
 
 const ListItem = ({ text }) => (
-  <li className="flex items-center gap-3 text-muted-foreground">
-    <CheckCircle2 className="w-5 h-5 text-green-500" />
+  <li className="flex items-start gap-3">
+    <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
     <span className="text-white/80">{text}</span>
   </li>
 );

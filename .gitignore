@@ -9,3 +9,6 @@ build/
 .npm
 scan_history.json
 *.db
+*.db-journal
+*.egg-info/
+generated_patches/

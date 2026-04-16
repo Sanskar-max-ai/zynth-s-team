@@ -1,17 +1,22 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name="zynth-ai-security",
     version="0.1.0",
-    description="Enterprise Adverarial AI Security Engine",
+    description="Adversarial security testing for AI agents and tool-using APIs",
     author="Zynth Founder",
     author_email="hello@zynth.com",
-    packages=find_packages(),
-    # Map the root 'backend' folder to our 'zynth' Python import space
+    packages=[
+        "zynth",
+        "zynth.backend",
+        "zynth.backend.engine",
+        "zynth.backend.tests",
+    ],
     package_dir={
-        'zynth': 'backend',
-        'zynth.engine': 'backend/engine',
-        'zynth.tests': 'backend/tests'
+        "zynth": ".",
+        "zynth.backend": "backend",
+        "zynth.backend.engine": "backend/engine",
+        "zynth.backend.tests": "backend/tests",
     },
     install_requires=[
         "fastapi>=0.100.0",
@@ -23,8 +28,13 @@ setup(
         "python-jose[cryptography]",
         "passlib[bcrypt]",
         "python-multipart",
-        "psycopg2-binary"
+        "psycopg2-binary",
     ],
+    entry_points={
+        "console_scripts": [
+            "zynth=zynth.cli:main",
+        ]
+    },
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

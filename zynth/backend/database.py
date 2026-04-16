@@ -1,9 +1,15 @@
 import os
+from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Fallback to local SQLite if Postgres isn't provided in .env
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./zynth_local.db")
+DEFAULT_SQLITE_PATH = Path(__file__).resolve().parent / "zynth_local.db"
+
+# Fallback to a backend-local SQLite database if Postgres isn't provided in .env
+SQLALCHEMY_DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    f"sqlite:///{DEFAULT_SQLITE_PATH.as_posix()}",
+)
 
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
     engine = create_engine(

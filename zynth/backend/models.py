@@ -1,7 +1,11 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from database import Base
+
+try:
+    from .database import Base
+except ImportError:
+    from database import Base
 
 class Workspace(Base):
     __tablename__ = "workspaces"

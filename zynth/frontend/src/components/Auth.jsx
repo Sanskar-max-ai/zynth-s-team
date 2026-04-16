@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Lock, Mail, ArrowRight, Loader2, AlertCircle, ChevronLeft } from 'lucide-react';
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8002';
 
 const Auth = ({ onAuthSuccess, onBack }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -30,10 +30,13 @@ const Auth = ({ onAuthSuccess, onBack }) => {
         
         onAuthSuccess(response.data.access_token);
       } else {
-        await axios.post(`${API_BASE_URL}/api/auth/register`, { email, password });
-        // After registration, auto-login or switch to login
-        setIsLogin(true);
-        setError('Account created! Please log in.');
+        const response = await axios.post(`${API_BASE_URL}/api/auth/register`, { email, password });
+        if (response.data.access_token) {
+          onAuthSuccess(response.data.access_token);
+        } else {
+          setIsLogin(true);
+          setError('Account created! Please log in.');
+        }
       }
     } catch (err) {
       console.error(err);

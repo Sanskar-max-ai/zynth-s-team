@@ -81,4 +81,9 @@ async def run_analysis():
             print("===============================\n")
 
 if __name__ == "__main__":
-    asyncio.run(run_analysis())
+    try:
+        from .verify_product import run_analysis as verify
+    except ImportError:
+        from verify_product import run_analysis as verify
+
+    verify()

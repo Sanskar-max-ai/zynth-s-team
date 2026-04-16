@@ -29,7 +29,17 @@ function App() {
   return (
     <div className="bg-background min-h-screen">
       {currentView === 'landing' && (
-        <LandingPage onLaunch={() => setCurrentView(token ? 'app' : 'auth')} />
+        <LandingPage onLaunch={(view) => {
+          if (view === 'docs') {
+            setCurrentView(token ? 'app' : 'auth');
+            // We'll use a small timeout to let the app load before switching to docs tab
+            setTimeout(() => {
+              window.dispatchEvent(new CustomEvent('zynth-nav', { detail: 'docs' }));
+            }, 100);
+          } else {
+            setCurrentView(token ? 'app' : 'auth');
+          }
+        }} />
       )}
       
       {currentView === 'auth' && (
